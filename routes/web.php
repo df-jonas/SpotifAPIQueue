@@ -18,3 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/me', 'RequestController@getMe');
+    Route::get('/spotify', 'SocialiteController@redirectToProvider')->name('spotify.redirect');
+    Route::get('/spotify/callback', 'SocialiteController@handleProviderCallback')->name('spotify.callback');
+});
