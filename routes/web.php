@@ -17,10 +17,34 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
+/**
+ * Authenticated routes
+ */
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/me', 'RequestController@getMe');
+
+    /**
+     * Spotify routes
+     */
     Route::get('/spotify', 'SocialiteController@redirectToProvider')->name('spotify.redirect');
     Route::get('/spotify/callback', 'SocialiteController@handleProviderCallback')->name('spotify.callback');
+    Route::get('/home', 'WebController@index')->name('home');
+
+    /**
+     * Other routes
+     */
+    Route::group(['middleware' => ['spotify']], function () {
+
+        /**
+         * Web routes
+         */
+
+
+        /**
+         * API routes
+         */
+        Route::group(['prefix' => '/api'], function () {
+            Route::get('/me', 'RequestController@getSpotifyUser');
+            Route::get('/search', 'RequestController@searchsong');
+        });
+    });
 });
