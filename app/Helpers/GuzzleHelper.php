@@ -18,7 +18,7 @@ class GuzzleHelper
         $now->addMinutes(5);
         $expires = Carbon::createFromTimestamp(strtotime(Auth::user()->expires));
 
-        if (true || $now->gte($expires)) {
+        if ($now->gte($expires)) {
             $a = json_decode(self::refresh(), true);
             $headers["Authorization"] = "Bearer " . $a['access_token'];
         }
